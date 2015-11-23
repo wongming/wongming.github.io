@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Simple-Smalltalk-Testing-With-Patterns(单元测试框架) | wongming</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
+First Class Software, Inc.
+这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。
+IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Simple-Smalltalk-Testing-With-Patterns(单元测试框架)">
+<meta property="og:url" content="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html">
+<meta property="og:site_name" content="wongming">
+<meta property="og:description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
+First Class Software, Inc.
+这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。
+IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策">
+<meta property="og:updated_time" content="2015-11-23T12:00:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Simple-Smalltalk-Testing-With-Patterns(单元测试框架)">
+<meta name="twitter:description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
+First Class Software, Inc.
+这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。
+IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策">
+  
+    <link rel="alternative" href="/atom.xml" title="wongming" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://ww4.sinaimg.cn/large/4db7629cgw1ex7b8g0d0fj20hs0i2mzt.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">WongMing</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wongming&#39;s personal website</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/categories/blog/">技术博客</a></li>
+				        
+							<li><a href="/categories/essay/">生活随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/wongming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/fangaoshiwo" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/byonecry" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="/byonecry@qq.com" title="mail">mail</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Front-End/" style="font-size: 10px;">Front-End</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/talk/" style="font-size: 10px;">talk</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/列表分页/" style="font-size: 10px;">列表分页</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">Java,Python,QA...Basketball,Fitness...Dota</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">WongMing</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://ww4.sinaimg.cn/large/4db7629cgw1ex7b8g0d0fj20hs0i2mzt.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">WongMing</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wongming&#39;s personal website</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/categories/blog/">技术博客</a></li>
+		        
+					<li><a href="/categories/essay/">生活随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/wongming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/fangaoshiwo" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/byonecry" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="/byonecry@qq.com" title="mail">mail</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Simple-Smalltalk-Testing-With-Patterns" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/blog/Simple-Smalltalk-Testing-With-Patterns.html" class="article-date">
+  	<time datetime="2015-11-19T11:16:37.000Z" itemprop="datePublished">2015-11-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Simple-Smalltalk-Testing-With-Patterns(单元测试框架)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻译/">翻译</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/blog/">blog</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Simple-Smalltalk-Testing-With-Patterns">Simple-Smalltalk-Testing-With-Patterns</h2><p>Kent Beck</p>
+<p>First Class Software, Inc.</p>
+<p>这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。</p>
+<h2 id="Introduction">Introduction</h2><p>Smalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策略和框架并不是为一个完整的解决方案，但绝对是构建企业级工具和程序的起点。</p>
+<p>这篇文章将分为三个部分：</p>
+<ul>
+<li>Philosophy - 描述编写和运行欠有框架的测试的基本思想理念。阅读这部分了解大致的背景。</li>
+<li>Cookbook - 你编写测试的简单模式系统。</li>
+<li>Framework - 一个简单易懂的测试框架的程序版本。深入阅读这部分来了解框架的机制。</li>
+<li>Example - 一个用测试框架来测试方法的示例。<a id="more"></a>
+</li>
+</ul>
+<h2 id="Philosophy">Philosophy</h2><p>我不太喜欢基于接口的测试。根据我的经验，基于用户接口脚本的测试健壮性很差而一点不易用。当我在做用用户接口测试的项目时，第二天早上测试报告中二三十个测试挂了是经常的事。然而快速检查后，大多数甚至所有的失败的测试实际上达到了程序的预期。一些接口的表面改变导致了实际上的输出不再和预期的输出匹配。我们的测试人员相比写测试脚本花了更多的时间来保证测试用例的迭代更新和追踪测试的正确性。</p>
+<p>我的解决方案是在Smalltalk中编写测试和核对结果。尽管你的测试人员需要编写简单的Smalltalk程序,但是由此测试变得稳定的多了。</p>
+<h3 id="Failures_and_Errors">Failures and Errors</h3><p>这个框架区分failures和errors。Failures是可预料的问题。当你编写测试时，你需要核实预期的结果。当你获得了一个不一样的结果，那就是一个failure。Error更加灾难性，你没有核对的错误状况。</p>
+<h3 id="Unit_testing">Unit testing</h3><p>我建议开发者自己撰写他们自己的单元测试，每一个类一个。这个框架支持基于类编写测试套件。我建议所有的类都与testSuite挂钩，testSuite返回包括一系列的单元测试的suite。我建议开发者华25%-50%的时间开发测试。</p>
+<h3 id="Integration_testing">Integration testing</h3><p>我建议一个独立的测试人员编写集成测试。那哪里该用集成测试呢？为了更好的编程式入口的用户接口框架的最近动向提供了一个答案- 用户接口，但是是在测试上做。In VisualWorks (the dialect used in the implementation below), you can open an ApplicationModel and begin stuffing values into its ValueHolders, causing all sorts of havoc, with very little trouble.</p>
+<h3 id="Running_tests">Running tests</h3><p>最后一点关于理念原理的部分。先是设置好一系列数据，然后跑一系列的测试，最后清除，是很吸引人的。根据我的经验来看，它总是引发更多的问题但是它使值得的。测试停止和另外一个交互，一个测试的失败可以避免之后的测试继续运行。测试框架使得设置一系列的测试数据变得很容易，但是对于每个测试数据都会被创建和丢弃。这个方法下的潜在性能问题并不大，因为众多套件的测试可以不被观察地运行。</p>
+<h2 id="Cookbook">Cookbook</h2><p>这里编写测试的简单模式系统。具体模式如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Pattern</th>
+<th style="text-align:left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Fixture</td>
+<td style="text-align:left">Create a common test fixture.</td>
+</tr>
+<tr>
+<td style="text-align:left">Test Case</td>
+<td style="text-align:left">Create the stimulus for a test case.</td>
+</tr>
+<tr>
+<td style="text-align:left">Check</td>
+<td style="text-align:left">Check the response for a test case.</td>
+</tr>
+<tr>
+<td style="text-align:left">Test Suite</td>
+<td style="text-align:left">Aggregate TestCases.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Fixture">Fixture</h3><h4 id="怎么开始编写测试?">怎么开始编写测试?</h4><p>测试就是这些不可能任务的之一。你最好绝对完整的，这样你才可以肯定软件可以正常运行。否则，你的程序的可能状态数目会变得太大以至于你几乎不可能测试所有的组合。</p>
+<p>如果你不了解你即将测试的东西，你永远不会开始。最好以以一个运行情况可以预估的单一配置开始。只有你对软件越来越来有经验，你才能够添加一系列的配置。</p>
+<p>这样的配置称作fixture。一个fixture的举例如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Fixture</th>
+<th style="text-align:left">Predictions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1.0 and 2.0</td>
+<td style="text-align:left">Easy to predict answers to arithmetic problems.</td>
+</tr>
+<tr>
+<td style="text-align:left">Network connection to a known machine</td>
+<td style="text-align:left">Responses to network packets.</td>
+</tr>
+<tr>
+<td style="text-align:left">#() and #(1 2 3)</td>
+<td style="text-align:left">Results of sending testing messages.</td>
+</tr>
+</tbody>
+</table>
+<p>通过选择fixture你表述你即将测的和不测的。社区对象的完整系列的测试有很多fixture，每个都会被通过很多方式测试。</p>
+<h4 id="设计一个test_fixture">设计一个test fixture</h4><ul>
+<li>继承TestCase</li>
+<li>为fixture中的每个已知对象添加实例变量</li>
+<li>重写setup来初始化变量</li>
+</ul>
+<p>在示例中，test fixture有两组，一个空的，一个带有变量。首先，继承TestCase和添加我们后面需要引用的实例变量：</p>
+<pre><code>Class: SetTestCase
+    superclass: TestCase
+   <span class="instruction"> instance </span>variables: empty full
+</code></pre><p>然后，重写setUp来为fixture创建对象：</p>
+<pre><code>SetTestCase&gt;&gt;setUp
+    empty := Set new.
+    full := Set
+    with: <span class="hexcolor">#abc</span>
+    with: <span class="number">5</span>
+</code></pre><h3 id="Test_Case">Test Case</h3><p>你已经有了fixture，接下来该做什么？</p>
+<h4 id="你如何表述一个单一的单元测试?">你如何表述一个单一的单元测试?</h4><p>你可以预测发送一个消息到fixture的结果。你需要以某种方式表述这样一个可预测的状况。</p>
+<p>最简单的方法是交互式地表述。你可以在你的fixture中打开一个Inspector，然后给它发消息。这个方法有两个缺点。第一，你一直对同一个fixture发消息。一旦一个测试碰巧打乱了对象，所有的后续测试会失败，即使代码是正确的。更重要的是，因此，你不能很容易地使相互影响的测试和其他的交互。如果，你吧你的对象给其他测试，审查是唯一的方式。</p>
+<p>通过吧每个可预测的状况表述为一个对象，每个都有自己的fixture，任何两个测试不会互相干扰。所以，我可以很容易把测试给其他人运行。</p>
+<h4 id="把一个可预估的fixture的反应描述为一个方法">把一个可预估的fixture的反应描述为一个方法</h4><ul>
+<li>给TestCase子类添加一个方法</li>
+<li>在方法中驱动fixture</li>
+</ul>
+<p>示例代码会表明这些。我们可以预测把5加到一个空的组会导致5出现在组中。我们给我们的TestCase子类添加一个方法。在这个方法中我们驱动fixture。</p>
+<pre><code><span class="constant">SetTestCase</span><span class="prompt">&gt;&gt;</span>testAdd
+    empty <span class="symbol">add:</span> <span class="number">5</span>.
+    ...
+</code></pre><p>一旦你驱动了fixture，你需要添加一个check来保证你的预估是正确的。</p>
+<h3 id="Check">Check</h3><p>一个Test Case驱动一个fixture。</p>
+<h4 id="你如何测试预期的结果">你如何测试预期的结果</h4><p>如果你交互性地测试，你可以直接核对预期的结果。如果你需要查找一个以特定的返回值，你打印出来，保证你获得了正确的返回对象。如果你需要查找副作用，你可以使用Inspector。</p>
+<p>由于测试在他们自己的对象中，你需要一个方法编程式的寻找问题。一个方法就是通过使用带有根据测试逻辑发送错误信号的标准错误处理机制(Object&gt;&gt;error:) 。</p>
+<pre><code><span class="number">2</span> + <span class="number">3</span> = <span class="number">5</span> ifFalse: [self error: ‘Wrong answer’]
+</code></pre><p>当你测试的时候，你需要区分你需要核查的错误，如，2+3得到了6，和你没有预测到的错误，如，下标超过范围或者消息你没有理解。</p>
+<p>你对意料之外的错误所做的并不多（如果你对它做了，它不算是意料之外了，不是吗？）。当一个灾难性的错误发生，框架停止运行那个测试，记录下错误，然后继续运行下一个测试case。由于每个测试都有自己的fixture，上一个case的错误不会影响下一个case。</p>
+<h2 id="未完待续。。。">未完待续。。。</h2><h2 id="结语">结语</h2><p>Translator:  wongming.cn</p>
+<p>version:  v1</p>
+<p>update:  2015年11月19日</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/page-list-wrapper-for-front-end.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          前端列表分页功能封装
+        
+      </div>
+    </a>
+  
+  
+    <a href="/essay/what-i-want.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">我究竟想要什么</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Simple-Smalltalk-Testing-With-Patterns" data-title="Simple-Smalltalk-Testing-With-Patterns(单元测试框架)" data-url="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"wongming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 <a href="http://wongming.cn/work-out/">WongMing</a>
+    	</div>
+      	<div class="footer-right">
+      		Contact me by <a href="https://github.com/wongming" target="_blank">Github</a> or <a href="mailto:byonecry@qq.com">Email</a>
+      	</div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
