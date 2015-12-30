@@ -3,27 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Simple-Smalltalk-Testing-With-Patterns(单元测试框架) | wongming</title>
+  <title>【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架) | wongming</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
-First Class Software, Inc.
-这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。
-IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策">
+First Class Software, Inc.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Simple-Smalltalk-Testing-With-Patterns(单元测试框架)">
+<meta property="og:title" content="【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)">
 <meta property="og:url" content="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html">
 <meta property="og:site_name" content="wongming">
 <meta property="og:description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
-First Class Software, Inc.
-这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。
-IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策">
-<meta property="og:updated_time" content="2015-11-23T12:00:57.000Z">
+First Class Software, Inc.">
+<meta property="og:updated_time" content="2015-11-24T06:42:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simple-Smalltalk-Testing-With-Patterns(单元测试框架)">
+<meta name="twitter:title" content="【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)">
 <meta name="twitter:description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
-First Class Software, Inc.
-这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。
-IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策">
+First Class Software, Inc.">
   
     <link rel="alternative" href="/atom.xml" title="wongming" type="application/atom+xml">
   
@@ -121,7 +115,7 @@ IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过�
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Front-End/" style="font-size: 10px;">Front-End</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/talk/" style="font-size: 10px;">talk</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/列表分页/" style="font-size: 10px;">列表分页</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a>
+						<a href="/tags/Front-End/" style="font-size: 10px;">Front-End</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/内存管理/" style="font-size: 10px;">内存管理</a> <a href="/tags/列表分页/" style="font-size: 10px;">列表分页</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a>
 					</div>
 				</section>
 				
@@ -204,7 +198,7 @@ IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过�
         
   
     <h1 class="article-title" itemprop="name">
-      Simple-Smalltalk-Testing-With-Patterns(单元测试框架)
+      【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)
     </h1>
   
 
@@ -229,16 +223,14 @@ IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过�
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="Simple-Smalltalk-Testing-With-Patterns">Simple-Smalltalk-Testing-With-Patterns</h2><p>Kent Beck</p>
-<p>First Class Software, Inc.</p>
-<p>这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。</p>
+<p>First Class Software, Inc.<br><a id="more"></a><br>这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。</p>
 <h2 id="Introduction">Introduction</h2><p>Smalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策略和框架并不是为一个完整的解决方案，但绝对是构建企业级工具和程序的起点。</p>
 <p>这篇文章将分为三个部分：</p>
 <ul>
 <li>Philosophy - 描述编写和运行欠有框架的测试的基本思想理念。阅读这部分了解大致的背景。</li>
 <li>Cookbook - 你编写测试的简单模式系统。</li>
 <li>Framework - 一个简单易懂的测试框架的程序版本。深入阅读这部分来了解框架的机制。</li>
-<li>Example - 一个用测试框架来测试方法的示例。<a id="more"></a>
-</li>
+<li>Example - 一个用测试框架来测试方法的示例。</li>
 </ul>
 <h2 id="Philosophy">Philosophy</h2><p>我不太喜欢基于接口的测试。根据我的经验，基于用户接口脚本的测试健壮性很差而一点不易用。当我在做用用户接口测试的项目时，第二天早上测试报告中二三十个测试挂了是经常的事。然而快速检查后，大多数甚至所有的失败的测试实际上达到了程序的预期。一些接口的表面改变导致了实际上的输出不再和预期的输出匹配。我们的测试人员相比写测试脚本花了更多的时间来保证测试用例的迭代更新和追踪测试的正确性。</p>
 <p>我的解决方案是在Smalltalk中编写测试和核对结果。尽管你的测试人员需要编写简单的Smalltalk程序,但是由此测试变得稳定的多了。</p>
@@ -355,8 +347,8 @@ IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过�
     </a>
   
   
-    <a href="/essay/what-i-want.html" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">我究竟想要什么</div>
+    <a href="/blog/java-management.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java内存管理及对Java对象管理</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -385,7 +377,7 @@ IntroductionSmalltalk因为缺少测试文化一直饱受困扰。本章通过�
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Simple-Smalltalk-Testing-With-Patterns" data-title="Simple-Smalltalk-Testing-With-Patterns(单元测试框架)" data-url="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html"></div>
+	<div class="ds-thread" data-thread-key="Simple-Smalltalk-Testing-With-Patterns" data-title="【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)" data-url="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
