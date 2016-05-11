@@ -1,0 +1,1014 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Front-End,列表分页," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="引言在做web项目的时候经常会写列表页面，一个列表页面可以包含很多内容：分页信息、排序、搜索等等。
+我之前一般通过两种方式实现。一种方法是，把数据查到，在页面for循环以表格的方式展示，然后再写js作分页逻辑和搜索。另外一种是，用现成的表格插件DataTables，使用起来比较简单，不用自己写js实现分页逻辑和搜索。DataTables集成了很多现成的功能（排序、搜索、分页），只要简单配置一下即可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端列表分页功能封装">
+<meta property="og:url" content="http://wongming.cn/blog/page-list-wrapper-for-front-end.html">
+<meta property="og:site_name" content="wongming">
+<meta property="og:description" content="引言在做web项目的时候经常会写列表页面，一个列表页面可以包含很多内容：分页信息、排序、搜索等等。
+我之前一般通过两种方式实现。一种方法是，把数据查到，在页面for循环以表格的方式展示，然后再写js作分页逻辑和搜索。另外一种是，用现成的表格插件DataTables，使用起来比较简单，不用自己写js实现分页逻辑和搜索。DataTables集成了很多现成的功能（排序、搜索、分页），只要简单配置一下即可">
+<meta property="og:updated_time" content="2015-11-23T11:51:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端列表分页功能封装">
+<meta name="twitter:description" content="引言在做web项目的时候经常会写列表页面，一个列表页面可以包含很多内容：分页信息、排序、搜索等等。
+我之前一般通过两种方式实现。一种方法是，把数据查到，在页面for循环以表格的方式展示，然后再写js作分页逻辑和搜索。另外一种是，用现成的表格插件DataTables，使用起来比较简单，不用自己写js实现分页逻辑和搜索。DataTables集成了很多现成的功能（排序、搜索、分页），只要简单配置一下即可">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 前端列表分页功能封装 | wongming </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71881751-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">wongming</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">wongming | 凡高 的个人网站</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-blog">
+          <a href="/categories/blog" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            技术博客
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            个人随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                前端列表分页功能封装
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-19T19:34:08+08:00" content="2015-11-19">
+              2015-11-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/page-list-wrapper-for-front-end.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="blog/page-list-wrapper-for-front-end.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言">引言</h2><p>在做web项目的时候经常会写列表页面，一个列表页面可以包含很多内容：分页信息、排序、搜索等等。</p>
+<p>我之前一般通过两种方式实现。一种方法是，把数据查到，在页面for循环以表格的方式展示，然后再写js作分页逻辑和搜索。另外一种是，用现成的表格插件DataTables，使用起来比较简单，不用自己写js实现分页逻辑和搜索。DataTables集成了很多现成的功能（排序、搜索、分页），只要简单配置一下即可，样式也很好看。</p>
+<p>然而，以上两种方式有个很大的弊端，需要把数据一次性从服务端获取，搜索和排序也是在前台进行的，当数据量很大的，列表页面速度就很慢，用户体验很差。如何优化这个问题呢？把数据缓存？No!我们可以暂时把列表数据的概要信息获取到，每次只查询部分数据，当想翻页后被查看的数据不在这部分数据中后重新向服务端获取数据即可。<br><a id="more"></a></p>
+<h2 id="需求分析">需求分析</h2><h3 id="功能">功能</h3><p>前端页面功能包括：</p>
+<ul>
+<li>翻页</li>
+<li>跳到首页</li>
+<li>跳到末页</li>
+<li>跳到某页</li>
+<li>切换每页显示的数据条数</li>
+<li>排序</li>
+<li>搜索</li>
+</ul>
+<p>列表数据的更新均以异步加载的形式，数据传递均按照Json格式。</p>
+<p>部分查询，即每次只向后台取部分数据，不取全部数据，不只取一页的数据，如每次取200条，前台页面每页10条，这样每次翻10页后才再向后台请求。</p>
+<h3 id="封装的数据">封装的数据</h3><p>根据要求功能定义封装数据如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">property(back-end)</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">pageData</td>
+<td style="text-align:left">后端返回的列表数据，json格式，条数小于等于bufferSize。</td>
+</tr>
+<tr>
+<td style="text-align:left">totalDataNo</td>
+<td style="text-align:left">列表数据的总条数。</td>
+</tr>
+<tr>
+<td style="text-align:left">startIndex</td>
+<td style="text-align:left">pageData的第一条数据的index。</td>
+</tr>
+<tr>
+<td style="text-align:left">bufferSize</td>
+<td style="text-align:left">缓存数据的大小，即每次向后台查询的数量。</td>
+</tr>
+<tr>
+<td style="text-align:left">sortCondition</td>
+<td style="text-align:left">排序情况，json格式，如{1:0,2:1}为第二列降序，第三列升序。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">property(front-end)</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">pageData</td>
+<td style="text-align:left">列表数据，数组，条数小于等于bufferSize。</td>
+</tr>
+<tr>
+<td style="text-align:left">arrayData</td>
+<td style="text-align:left">经过分页处理的列表数据，数组，如arrayData[1]表示第startPageNo+1也的列表数据。</td>
+</tr>
+<tr>
+<td style="text-align:left">pageSize</td>
+<td style="text-align:left">每页显示的条数。</td>
+</tr>
+<tr>
+<td style="text-align:left">startIndex</td>
+<td style="text-align:left">pageData的第一条数据的index。</td>
+</tr>
+<tr>
+<td style="text-align:left">totalDataNo</td>
+<td style="text-align:left">列表数据的总条数。</td>
+</tr>
+<tr>
+<td style="text-align:left">currentPageNo</td>
+<td style="text-align:left">当前页。</td>
+</tr>
+<tr>
+<td style="text-align:left">startPageNo</td>
+<td style="text-align:left">缓存区间的第一条数据所处在的页码。</td>
+</tr>
+<tr>
+<td style="text-align:left">endPageNo</td>
+<td style="text-align:left">缓存区间的最后一条数据所处在的页码。</td>
+</tr>
+<tr>
+<td style="text-align:left">pageNo</td>
+<td style="text-align:left">总页数</td>
+</tr>
+<tr>
+<td style="text-align:left">bufferSize</td>
+<td style="text-align:left">缓存数据的大小，即每次向后台查询的数量。</td>
+</tr>
+<tr>
+<td style="text-align:left">sortCondition</td>
+<td style="text-align:left">排序情况，json格式，如{1:0,2:1}为第二列降序，第三列升序。</td>
+</tr>
+<tr>
+<td style="text-align:left">postUrl</td>
+<td style="text-align:left">列表数据接口的url</td>
+</tr>
+<tr>
+<td style="text-align:left">postData</td>
+<td style="text-align:left">数据接口表单数据</td>
+</tr>
+</tbody>
+</table>
+<p>postData格式如下：</p>
+<pre><code>{
+    "<span class="attribute">bufferSize</span>": <span class="value"><span class="number">100</span></span>,
+    "<span class="attribute">startIndex</span>": <span class="value"><span class="number">0</span>
+</span>}
+</code></pre><p>根据以上的封装属性可知后台返回的数据格式如下：</p>
+<pre><code>{
+    "<span class="attribute">pageData</span>": <span class="value">[
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"Go to US"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"1"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-05"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"Come back China"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"2"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-15"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"Go to lab"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"3"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-20"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"Go to Shopping"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"4"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-25"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"Attend conference"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"5"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-30"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"View TV"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"6"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-01"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"View SAKAI"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"7"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-02"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"View Movie"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"8"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-01"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"Review papers"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"9"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-03"</span>
+        </span>},
+        {
+            "<span class="attribute">task</span>": <span class="value"><span class="string">"1sdfsdf papers"</span></span>,
+            "<span class="attribute">location</span>": <span class="value"><span class="string">"10"</span></span>,
+            "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-03"</span>
+        </span>}
+    ]</span>,
+    "<span class="attribute">totalDataNo</span>": <span class="value"><span class="number">9</span></span>,
+    "<span class="attribute">startIndex</span>": <span class="value"><span class="number">0</span></span>,
+    "<span class="attribute">bufferSize</span>": <span class="value"><span class="number">10</span></span>,
+    "<span class="attribute">sortCondition</span>": <span class="value">{}
+</span>}
+</code></pre><p>arrayData的格式如下：</p>
+<pre><code>[
+    {
+        "<span class="attribute">pageData</span>": <span class="value">[
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"Go to US"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"1"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-05"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"Come back China"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"2"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-15"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"Go to lab"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"3"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-20"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"Go to Shopping"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"4"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-25"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"Attend conference"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"5"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-09-30"</span>
+            </span>}
+        ]
+    </span>},
+    {
+        "<span class="attribute">pageData</span>": <span class="value">[
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"View TV"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"6"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-01"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"View SAKAI"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"7"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-02"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"View Movie"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"8"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-01"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"Review papers"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"9"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-03"</span>
+            </span>},
+            {
+                "<span class="attribute">task</span>": <span class="value"><span class="string">"1sdfsdf papers"</span></span>,
+                "<span class="attribute">location</span>": <span class="value"><span class="string">"10"</span></span>,
+                "<span class="attribute">time</span>": <span class="value"><span class="string">"2010-10-03"</span>
+            </span>}
+        ]
+    </span>}
+]
+</code></pre><h2 id="技术实现">技术实现</h2><h3 id="Trimpath">Trimpath</h3><p>Trimpath JavaScript 是个轻量级的，基于JavaScript的，跨浏览器，采用APL/GPL开放源代码协议的，可以让你轻松进行基于模板编程方式的纯JS引擎。它有如下的特点：</p>
+<ul>
+<li>采用标准的JavaScript编写，支持跨浏览器；模板</li>
+<li>采用简易的语言来描述大段的字串以及Dom/DHTML操作;</li>
+<li>以很方便的解析XML文件格式的数据到指定模板。</li>
+</ul>
+<h4 id="基本用法">基本用法</h4><p>在页面中引入template.js 文件之后，脚本将创建一个Trimpath对象供用户使用。</p>
+<pre><code><span class="function"><span class="title">parseDOMTemplate</span><span class="params">(elementId,optionalDocument)</span></span><span class="comment">//获得模板字符串代码</span>
+</code></pre><p>其中elementId是页面一个具有隐藏属性的模板元素的id,通常是一个textarea元素。optionalDocument 是一个可选参数，在使用iframe，frameset等多文档页面时有用。这个方法正确执行后会返回一个templateObject对象，这个对象经过调用process()方法可以得到最终的html的代码。</p>
+<pre><code><span class="keyword">var</span> <span class="literal">result</span>=parseDOMTemplate(elementId,optionalDocument).process(data)
+</code></pre><p>//得到最终的html代码</p>
+<p>其中data为一个json对象，包含模板所需要的数据。</p>
+<p>举例说明：</p>
+<pre><code><span class="keyword">var</span> data = {name:<span class="string">"wongming.cn"</span>,age:<span class="string">"25"</span>,sex: <span class="string">"man"</span>} ;//定义数据
+<span class="keyword">var</span> <span class="literal">result</span> = <span class="type">Trimpath</span>. parseDOMTemplate(“test”).process(data);//得到处理过后的html文件
+document.getElementById(“content”).innerHTML = <span class="literal">result</span>;//将处理过后的文件装进id为<span class="string">"content"</span>的元素
+</code></pre><p>然后就是在相应的html文件里写上对应的模板。模板语法包括两个方面的内容，一个是用于数据控制的（循环遍历），另一个是用于逻辑控制（if语句）的。循环控制的一般写法如下：</p>
+<pre><code><span class="variable">&lt;table&gt;</span>
+    <span class="variable">&lt;thead&gt;</span>
+        <span class="variable">&lt;tr&gt;</span>
+            <span class="variable">&lt;th&gt;</span>Name<span class="variable">&lt;/th&gt;</span>
+            <span class="variable">&lt;th&gt;</span>Age<span class="variable">&lt;/th&gt;</span>
+            <span class="variable">&lt;th&gt;</span>Education<span class="variable">&lt;/th&gt;</span>
+        <span class="variable">&lt;/tr&gt;</span>
+    <span class="variable">&lt;/thead&gt;</span>
+    <span class="variable">&lt;tbody&gt;</span>
+    {<span class="keyword">for</span> item <span class="keyword">in</span> data}
+        <span class="variable">&lt;tr&gt;</span>
+            <span class="variable">&lt;td&gt;</span>{item.name}<span class="variable">&lt;/td&gt;</span>
+            <span class="variable">&lt;td&gt;</span>{item.age}<span class="variable">&lt;/td&gt;</span>
+            <span class="variable">&lt;td&gt;</span>{item.sex}<span class="variable">&lt;/td&gt;</span>
+        <span class="variable">&lt;/tr&gt;</span>
+    {/<span class="keyword">for</span>}
+    <span class="variable">&lt;/tbody&gt;</span>
+<span class="variable">&lt;/table&gt;</span>
+</code></pre><p>其中data是模板函数数据名称，{for item in data}表示的意思是遍历data里面数据，并将每次取到数据放到item这个变量中。{item.name}表示的意思是取出item里面的name值。</p>
+<p>逻辑控制的一般写法为：</p>
+<pre><code><span class="xml"><span class="tag">&lt;<span class="title">td</span>&gt;</span>
+    </span><span class="expression">{<span class="variable"><span class="keyword">if</span></span> <span class="variable">item.sex</span> == 0}</span><span class="xml"> 女 </span><span class="expression">{<span class="variable">elseif</span> <span class="variable">item.sex</span> == 1}</span><span class="xml"> 男 </span><span class="expression">{<span class="end-block">/<span class="keyword">if</span></span>}</span><span class="xml">
+<span class="tag">&lt;/<span class="title">td</span>&gt;</span></span>
+</code></pre><h3 id="实现思路">实现思路</h3><p>你在列表的所有点击操作可以归纳为对pageInfo的数据的操作。</p>
+<p>下面由下一页讲解具体实现思路：</p>
+<ul>
+<li>用户点击下一页，判断缓存区间的数据还是否有效</li>
+<li>-&gt; 有效，currentPageNo++，利用缓存区的数据重新渲染页面</li>
+<li>-&gt; 无效，currentPageNo++，封装数据接口请求，并根据返回的数据重新渲染页面</li>
+</ul>
+<p>其他的事件也类似，可以归纳为：</p>
+<ul>
+<li>用户点击事件操作</li>
+<li>-&gt; buffer区内data有效 -&gt; 修正pageInfo -&gt; loadTemplate(渲染)</li>
+<li>-&gt; buffer区内data无效 -&gt; 由接口获取新数据 -&gt; 修正pageInfo -&gt; loadData（修正arrayData） -&gt; loadTemplate（渲染）</li>
+</ul>
+<p><a href="https://github.com/wongming/pageList" target="_blank" rel="external">源码下载：https://github.com/wongming/pageList</a></p>
+<pre><code><span class="keyword">var</span> showNextPage = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+    <span class="keyword">if</span> (pageInfo.currentPageNo!=pageInfo.pageNo) {<span class="comment">//最后一页不能点击</span>
+        <span class="keyword">if</span> (pageInfo.currentPageNo&lt;pageInfo.endPageNo) {<span class="comment">//当前页在缓存数据区域内，不用获取新的数据</span>
+            pageInfo.currentPageNo++;<span class="comment">//当前页+1</span>
+            loadTemplate(pageInfo.arrayData[pageInfo.currentPageNo-pageInfo.startPageNo]);<span class="comment">//从arrayData获取数据并由Trimpath渲染</span>
+        }<span class="keyword">else</span>{<span class="comment">//当前页不在缓存数据区域内，需要重新获取bufferSize条数据</span>
+            pageInfo.currentPageNo++;
+            pageInfo.postData={
+                <span class="string">"bufferSize"</span>: pageInfo.bufferSize,
+                <span class="string">"startIndex"</span>: (pageInfo.currentPageNo-<span class="number">1</span>)* pageInfo.pageSize
+            };
+            showPage()；
+        };
+    };
+};
+
+<span class="keyword">var</span> showPage = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    $.post(
+        pageInfo.postUrl,
+        pageInfo.postData,
+        <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>{
+            pageListData = data;
+            pageInfo.pageData =  data.pageData;
+            pageInfo.bufferSize = data.bufferSize;
+            pageInfo.totalDataNo = data.totalDataNo;
+            pageInfo.startIndex = data.startIndex;
+            pageInfo.startPageNo = <span class="built_in">Math</span>.floor(pageInfo.startIndex/pageInfo.pageSize+<span class="number">1</span>);
+            pageInfo.endPageNo = pageInfo.startPageNo+<span class="built_in">Math</span>.ceil(pageInfo.pageData.length/pageInfo.pageSize)-<span class="number">1</span>; 
+            pageInfo.pageNo = <span class="built_in">Math</span>.ceil(pageInfo.totalDataNo/pageInfo.pageSize);
+            <span class="comment">//pageInfo.sortCondition = pageListData.sortCondition;</span>
+            loadData();
+            loadTemplate(pageInfo.arrayData[pageInfo.currentPageNo - pageInfo.startPageNo]);
+        }, 
+        <span class="string">"json"</span>
+    );
+};
+<span class="comment">//将pageData组装为arryData,每一个元祖对应每页的数据，</span>
+<span class="comment">//如arrayData[1]表示第startPageNo+1也的列表数据</span>
+<span class="keyword">var</span> loadData = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    pageInfo.arrayData = [];
+    <span class="keyword">if</span> (pageInfo.pageNo!=<span class="number">1</span>) {
+        <span class="keyword">var</span> itemNumber = pageInfo.pageData.length;
+        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; itemNumber; i++) {
+            <span class="keyword">if</span> (!pageInfo.arrayData[j]) {
+                pageInfo.arrayData[j] = $.parseJSON(<span class="string">'{"pageData": []}'</span>);
+            }
+            pageInfo.arrayData[j].pageData[i] = pageInfo.pageData[i];
+            <span class="keyword">if</span> (i % pageInfo.pageSize == pageInfo.pageSize - <span class="number">1</span>) {
+                j++;
+            }
+        }
+    } <span class="keyword">else</span> {
+        pageInfo.arrayData[<span class="number">0</span>] = {<span class="string">"pageData"</span>: pageInfo.pageData};
+    };
+};
+<span class="comment">//页面渲染列表数据</span>
+<span class="keyword">var</span> loadTemplate = <span class="function"><span class="keyword">function</span> (<span class="params">json</span>) </span>{
+    $(<span class="string">"#list_totalDataNo"</span>).text(pageInfo.totalDataNo);
+    $(<span class="string">"#list_pageSize"</span>).val(pageInfo.pageSize);
+    $(<span class="string">"#list_currentPageNo"</span>).val(pageInfo.currentPageNo);
+    $(<span class="string">"#list_pageNo"</span>).text(pageInfo.pageNo);
+    $(<span class="string">"#list_container"</span>).hide();
+    $(<span class="string">"#list_container"</span>).html(TrimPath.processDOMTemplate(<span class="string">"list_template"</span>, json));
+    $(<span class="string">"#list_container"</span>).show();
+};
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Front-End/" rel="tag">#Front-End</a>
+          
+            <a href="/tags/列表分页/" rel="tag">#列表分页</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/memory-and-object-management-of-java.html" rel="next" title="Java内存管理及对Java对象管理">
+                <i class="fa fa-chevron-left"></i> Java内存管理及对Java对象管理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/data-driven-unit-testing-tool-for-python.html" rel="prev" title="一种数据与逻辑分离的Python单元测试工具">
+                一种数据与逻辑分离的Python单元测试工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="blog/page-list-wrapper-for-front-end.html"
+           data-title="前端列表分页功能封装" data-url="http://wongming.cn/blog/page-list-wrapper-for-front-end.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww3.sinaimg.cn/mw690/4db7629cgw1f3rm6fnghsj20qo0zkq9a.jpg"
+               alt="WongMing" />
+          <p class="site-author-name" itemprop="name">WongMing</p>
+          <p class="site-description motion-element" itemprop="description">程序猿：Java Python 测试；爱好篮球：艾密、詹密；骑行；Dota1。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wongming" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/fangaoshiwo" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/wangmingedison" target="_blank" title="ZhiHu">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  ZhiHu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需求分析"><span class="nav-number">2.</span> <span class="nav-text">需求分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">2.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装的数据"><span class="nav-number">2.2.</span> <span class="nav-text">封装的数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技术实现"><span class="nav-number">3.</span> <span class="nav-text">技术实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Trimpath"><span class="nav-number">3.1.</span> <span class="nav-text">Trimpath</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本用法"><span class="nav-number">3.1.1.</span> <span class="nav-text">基本用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现思路"><span class="nav-number">3.2.</span> <span class="nav-text">实现思路</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WongMing</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wongming"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

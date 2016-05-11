@@ -1,0 +1,756 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python,测试," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="一种数据与逻辑分离的Python单元测试工具几个概念TestCaseTestCase是一个完整的测试单元，最小的测试执行实体，就是我们常说的测试用例。
+TestSuite以某种特性将测试用例组合到一起的测试用例集合被称作TestSuite，中文可以叫做测试套件。TestSuite可以包含TestCase，也可以嵌套TestSuite。
+TestFixtrueTestFixtrue是测试主程序运行时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一种数据与逻辑分离的Python单元测试工具">
+<meta property="og:url" content="http://wongming.cn/blog/data-driven-unit-testing-tool-for-python.html">
+<meta property="og:site_name" content="wongming">
+<meta property="og:description" content="一种数据与逻辑分离的Python单元测试工具几个概念TestCaseTestCase是一个完整的测试单元，最小的测试执行实体，就是我们常说的测试用例。
+TestSuite以某种特性将测试用例组合到一起的测试用例集合被称作TestSuite，中文可以叫做测试套件。TestSuite可以包含TestCase，也可以嵌套TestSuite。
+TestFixtrueTestFixtrue是测试主程序运行时">
+<meta property="og:image" content="http://ww3.sinaimg.cn/mw690/4db7629cjw1f3a6u7z5glj20kh0djta0.jpg">
+<meta property="og:updated_time" content="2016-05-11T10:50:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一种数据与逻辑分离的Python单元测试工具">
+<meta name="twitter:description" content="一种数据与逻辑分离的Python单元测试工具几个概念TestCaseTestCase是一个完整的测试单元，最小的测试执行实体，就是我们常说的测试用例。
+TestSuite以某种特性将测试用例组合到一起的测试用例集合被称作TestSuite，中文可以叫做测试套件。TestSuite可以包含TestCase，也可以嵌套TestSuite。
+TestFixtrueTestFixtrue是测试主程序运行时">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 一种数据与逻辑分离的Python单元测试工具 | wongming </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71881751-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">wongming</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">wongming | 凡高 的个人网站</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-blog">
+          <a href="/categories/blog" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            技术博客
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            个人随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一种数据与逻辑分离的Python单元测试工具
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-25T19:29:21+08:00" content="2016-04-25">
+              2016-04-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/data-driven-unit-testing-tool-for-python.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="blog/data-driven-unit-testing-tool-for-python.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一种数据与逻辑分离的Python单元测试工具">一种数据与逻辑分离的Python单元测试工具</h1><h2 id="几个概念">几个概念</h2><h3 id="TestCase">TestCase</h3><p>TestCase是一个完整的测试单元，最小的测试执行实体，就是我们常说的测试用例。</p>
+<h3 id="TestSuite">TestSuite</h3><p>以某种特性将测试用例组合到一起的测试用例集合被称作TestSuite，中文可以叫做测试套件。TestSuite可以包含TestCase，也可以嵌套TestSuite。</p>
+<h3 id="TestFixtrue">TestFixtrue</h3><p>TestFixtrue是测试主程序运行时所需要的一切东西，可能是数据，可能是系统环境，也有可能是某个具体实例化类，中文可以称作测试固件。TestFixtrue包括构建（setUp）和销毁（tearDown）两个部分。例如，某个测试用例需要访问数据库，那么可以在setUp中建立数据库连接并初始化相关数据，在tearDown中释放数据库连接并还原相关数据。此外，TestFixtrue既可以存在于测试用例层面，也可以存在于测试套件层面。<br><a id="more"></a></p>
+<h3 id="单元测试框架">单元测试框架</h3><p>结合以上概念，一个测试用例的执行过程包括：</p>
+<ul>
+<li>测试用例固件构建</li>
+<li>执行测试用例主程序</li>
+<li>测试用例固件销毁</li>
+</ul>
+<p>一个测试套件的执行过程包括：</p>
+<ul>
+<li>测试套件固件构建</li>
+<li>测试用例1固件构建</li>
+<li>执行测试用例1主程序</li>
+<li>测试用例1固件销毁</li>
+<li>测试用例2固件构建</li>
+<li>……</li>
+<li>测试用例n固件销毁</li>
+<li>测试套件固件销毁</li>
+</ul>
+<p><img src="http://ww3.sinaimg.cn/mw690/4db7629cjw1f3a6u7z5glj20kh0djta0.jpg" alt="测试套件执行过程"></p>
+<h3 id="常用的单元测试工具">常用的单元测试工具</h3><p>Python下常用的单元测试工具有unittest，PyUnit，nose。这三种工具的实现原理和使用方式大致相同。下面以unittest为例，来观察这些工具的特点。</p>
+<pre><code><span class="keyword">import</span> unittest
+<span class="class"><span class="keyword">class</span> <span class="title">CaculateTestCase</span><span class="params">(unittest.TestCase)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span>
+        self.a = <span class="number">1</span>
+        self.b = <span class="number">2</span>
+        <span class="keyword">print</span> <span class="string">'set up the fixture'</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span>
+        self.a = <span class="keyword">None</span>
+        self.b = <span class="keyword">None</span>
+        <span class="keyword">print</span> <span class="string">'tear down the fixture'</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">testAdd</span><span class="params">(self)</span>:</span>
+        <span class="keyword">assert</span> (self.a+self.b) == <span class="number">3</span>, <span class="string">'add function error'</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">testMinus</span><span class="params">(self)</span>:</span>
+        <span class="keyword">assert</span> (self.a-self.b) == -<span class="number">1</span>, <span class="string">'minus function error'</span>
+<span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:
+    unittest.main()
+</code></pre><p>在上面的代码中，CaculateTestCase是有关运算的TestCase，它继承自unittest.TestCase类。CaculateTestCase重写了setUp和tearDown方法，分别对应fixture的构建和销毁代码。<br>在加载测试任务时，unittest会根据目标文件寻找unittest.TestCase的子类，并寻找以“test”开头的方法，这些方法分别对应一个测试用例主程序。<br>因此，CaculateTestCase的具体执行流程是：</p>
+<ul>
+<li>执行CaculateTestCase中的setUp方法，进行固件构建</li>
+<li>依次执行CaculateTestCase中以“test”开头的方法，即testAdd和testMinus方法</li>
+<li>执行CaculateTestCase中的tearDown方法，进行固件销毁</li>
+</ul>
+<h2 id="分离数据与逻辑">分离数据与逻辑</h2><p>在CaculateTestCase实例中，a和b变量是写死在程序中，脚本显得相当死板，没有什么可重用性。若让数据在以单一的文件存在，CaculateTestCase中只包含逻辑程序，测试工具在执行用例时，会根据数据文件初始化实例变量。如此一来，分离了数据和逻辑，逻辑部分变得可重用，可定制。在经过这般处理后，一个测试用例划分为<strong>测试用例逻辑程序</strong>和<strong>测试用例数据</strong>两个部分。在这里，我将测试用例逻辑程序抽象为<strong>TestDriver</strong>，即测试驱动器，而测试用例数据称作<strong>TestParam</strong>，即测试驱动数据。</p>
+<h3 id="TestDriver">TestDriver</h3><p>与unittest等单元测试工具不同的是，我并没有将测试固件和主程序代码放在一个文件中或类中，而是用三个文件分别存放————setUp.py，tearDown.py，exec.py，并通过传递实例变量来共享TestCase实例。<br>因此，TestDriver的示例代码如下：<br>setUp.py代码：</p>
+<pre><code><span class="function"><span class="keyword">def</span>  <span class="title">setUp</span><span class="params">(tc)</span>:</span>
+    <span class="comment">#固件构建代码</span>
+    Pass
+</code></pre><p>tearDown.py代码：</p>
+<pre><code><span class="function"><span class="keyword">def</span>  <span class="title">tearDown</span> <span class="params">(ts)</span>:</span>
+    <span class="comment">#固件构建代码</span>
+    Pass
+</code></pre><p>exec.py 代码：</p>
+<pre><code><span class="function"><span class="keyword">def</span>  <span class="title">tc_case1</span> <span class="params">(tc)</span>:</span>
+    <span class="comment">#case1的测试逻辑代码</span>
+    <span class="keyword">pass</span>
+<span class="function"><span class="keyword">def</span>  <span class="title">tc_case2</span><span class="params">(tc)</span>:</span>
+    <span class="comment">#case2的测试逻辑代码</span>
+    <span class="keyword">pass</span>
+<span class="comment">#……</span>
+<span class="function"><span class="keyword">def</span>  <span class="title">tc_caseN</span><span class="params">(tc)</span>:</span>
+    <span class="comment">#caseN的测试逻辑代码</span>
+    <span class="keyword">pass</span>
+</code></pre><p>此外，TestDriver还包括默认的驱动参数信息，param.json，示例如下：</p>
+<pre><code>{
+    "<span class="attribute">key1</span>":<span class="value"><span class="string">"value1"</span></span>,
+    "<span class="attribute">key2</span>":<span class="value"><span class="string">"value2"</span></span>,
+    "<span class="attribute">key3</span>":<span class="value"><span class="string">"value3"</span>
+</span>}
+</code></pre><h3 id="TestCase-1">TestCase</h3><p>抽象出TestDriver后，在定义一个TestCase时不需要再写测试程序，而是指定一个TestDriver和TestParam，TestCase的示例文件如下：</p>
+<pre><code>{
+    "<span class="attribute">TestCase</span>":<span class="value"><span class="string">"caseName"</span></span>,
+    "<span class="attribute">TestDriver</span>": <span class="value"><span class="string">"dirverName"</span></span>,
+    "<span class="attribute">TestParam</span>": <span class="value">{
+        "<span class="attribute">key1</span>": <span class="value"><span class="string">"value1"</span></span>,
+        "<span class="attribute">key2</span>": <span class="value"><span class="string">"value2"</span></span>,
+        "<span class="attribute">key3</span>": <span class="value"><span class="string">"value3"</span>
+    </span>}
+</span>}
+</code></pre><h3 id="TestPlan">TestPlan</h3><p>为了更好地组织TestCase故提出TestPlan这一概念，在执行完TestPlan后，会生成测试报告，发送测试通知。示例如下：</p>
+<pre><code>{
+    "<span class="attribute">TestPlan</span>":<span class="value"><span class="string">"planName"</span></span>,
+    "<span class="attribute">CaseList</span>":<span class="value"><span class="string">"tc_case1,tc_case2,tc_case3"</span></span>,
+    "<span class="attribute">EmailList</span>":<span class="value"><span class="string">"xx@xx,xxx@xx"</span></span>,
+    "<span class="attribute">Crontab</span>":<span class="value"><span class="string">"xxx"</span>
+</span>}
+</code></pre><p>CaseList即TestPlan所包含的TestCase，EmailList即TestPlan执行完毕后接收通知的邮箱信息，Crontab即TestPlan的定时器执行的crontab配置。</p>
+<h3 id="TestLib">TestLib</h3><p>当测试逻辑比较复杂时，TestDriver中代码可能也随之变得复杂。这时需要提供一完善的Python测试库，所有的业务操作均在测试库中，TestDriver只需要引用测试库进行业务操作，不包含业务逻辑的具体实现程序。随着TestLib的不断丰富，TestDriver中内容越来简明清晰，构建一个TestDriver也变得简单。于此，测试工作变得简单和更容易维护。</p>
+<p>#总结<br>“driver-case-plan”这种测试概念模型是对传统的单元测试框架的一种泛化抽象，它使得case在一定程度上更将通用，不受测试类型和业务类型的限制。此外，由于TestDriver的setUp、tearDown和exec是三个独立的文件，而不是像传统的单元测试工具这三部分是融合在一个文件中，在Web化时很难用一个单一的字段存储各部分的代码。再加上，TestCase和TestPlan也是JSON格式的文件，这是不是意味着该工具更容易Web化？在添加TestDriver后，TestCase和TestPlan的相关操作（添加用例计划、执行用例计划等）只需要在Web端处理即可？是不是可以依据该工具很容易地实现一个通用的CASE管理平台？</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+            <a href="/tags/测试/" rel="tag">#测试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/page-list-wrapper-for-front-end.html" rel="next" title="前端列表分页功能封装">
+                <i class="fa fa-chevron-left"></i> 前端列表分页功能封装
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/simple-smalltalk-testing-with-patterns.html" rel="prev" title="【翻译】Simple-Smalltalk-Testing-With-Patterns">
+                【翻译】Simple-Smalltalk-Testing-With-Patterns <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="blog/data-driven-unit-testing-tool-for-python.html"
+           data-title="一种数据与逻辑分离的Python单元测试工具" data-url="http://wongming.cn/blog/data-driven-unit-testing-tool-for-python.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww3.sinaimg.cn/mw690/4db7629cgw1f3rm6fnghsj20qo0zkq9a.jpg"
+               alt="WongMing" />
+          <p class="site-author-name" itemprop="name">WongMing</p>
+          <p class="site-description motion-element" itemprop="description">程序猿：Java Python 测试；爱好篮球：艾密、詹密；骑行；Dota1。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wongming" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/fangaoshiwo" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/wangmingedison" target="_blank" title="ZhiHu">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  ZhiHu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一种数据与逻辑分离的Python单元测试工具"><span class="nav-number">1.</span> <span class="nav-text">一种数据与逻辑分离的Python单元测试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#几个概念"><span class="nav-number">1.1.</span> <span class="nav-text">几个概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TestCase"><span class="nav-number">1.1.1.</span> <span class="nav-text">TestCase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TestSuite"><span class="nav-number">1.1.2.</span> <span class="nav-text">TestSuite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TestFixtrue"><span class="nav-number">1.1.3.</span> <span class="nav-text">TestFixtrue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单元测试框架"><span class="nav-number">1.1.4.</span> <span class="nav-text">单元测试框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的单元测试工具"><span class="nav-number">1.1.5.</span> <span class="nav-text">常用的单元测试工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分离数据与逻辑"><span class="nav-number">1.2.</span> <span class="nav-text">分离数据与逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TestDriver"><span class="nav-number">1.2.1.</span> <span class="nav-text">TestDriver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TestCase-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">TestCase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TestPlan"><span class="nav-number">1.2.3.</span> <span class="nav-text">TestPlan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TestLib"><span class="nav-number">1.2.4.</span> <span class="nav-text">TestLib</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WongMing</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wongming"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
