@@ -1,12 +1,350 @@
-<!DOCTYPE html><html lang="null"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Some birds aren't meant to be caged, that's all. Their feathers are just too bright."><title>【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架) | wongming</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/pure-min.css"><link rel="stylesheet" type="text/css" href="/css/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)</h1><a id="logo" href="/.">wongming</a><p class="description">wongming | byonecry | 凡高是我吗 的个人博客</p></div><div id="nav-menu"><a href="/." class="current"><i class="icon-home"> 首頁</i></a><a href="/archives/"><i class="icon-archive"> 所有文章</i></a><a href="/about/"><i class="icon-about"> 關於</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post post-page"><h1 class="post-title">【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)</h1><div class="post-meta">2015-11-19 | <span class="categories">分類於<a href="/categories/blog/"> blog</a></span></div><span data-thread-key="blog/Simple-Smalltalk-Testing-With-Patterns.html" class="ds-thread-count"></span><div class="post-content"><h2 id="Simple-Smalltalk-Testing-With-Patterns">Simple-Smalltalk-Testing-With-Patterns</h2><p>Kent Beck</p>
-<p>First Class Software, Inc.<br><a id="more"></a><br>这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。</p>
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="测试," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
+First Class Software, Inc.
+Translator:  wongming.cn
+version:  v1
+update:  2015年11月19日
+version:  v2
+update:  2016年4月25日">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】Simple-Smalltalk-Testing-With-Patterns">
+<meta property="og:url" content="http://wongming.cn/blog/simple-smalltalk-testing-with-patterns.html">
+<meta property="og:site_name" content="wongming">
+<meta property="og:description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
+First Class Software, Inc.
+Translator:  wongming.cn
+version:  v1
+update:  2015年11月19日
+version:  v2
+update:  2016年4月25日">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/4db7629cjw1f39xxi1qeoj20dz0byab3.jpg">
+<meta property="og:updated_time" content="2016-05-11T10:51:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻译】Simple-Smalltalk-Testing-With-Patterns">
+<meta name="twitter:description" content="Simple-Smalltalk-Testing-With-PatternsKent Beck
+First Class Software, Inc.
+Translator:  wongming.cn
+version:  v1
+update:  2015年11月19日
+version:  v2
+update:  2016年4月25日">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 【翻译】Simple-Smalltalk-Testing-With-Patterns | wongming </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71881751-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">wongming</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">wongming | 凡高 的个人网站</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-blog">
+          <a href="/categories/blog" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            技术博客
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            个人随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【翻译】Simple-Smalltalk-Testing-With-Patterns
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-26T10:29:21+08:00" content="2016-04-26">
+              2016-04-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/simple-smalltalk-testing-with-patterns.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="blog/simple-smalltalk-testing-with-patterns.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Simple-Smalltalk-Testing-With-Patterns">Simple-Smalltalk-Testing-With-Patterns</h1><p>Kent Beck</p>
+<p>First Class Software, Inc.</p>
+<p>Translator:  wongming.cn</p>
+<p>version:  v1</p>
+<p>update:  2015年11月19日</p>
+<p>version:  v2</p>
+<p>update:  2016年4月25日<br><a id="more"></a><br>这个软件和文档是为编程社区提供服务的。First Class Software, Inc.并不提供任何保证，明示或默示。</p>
 <h2 id="Introduction">Introduction</h2><p>Smalltalk因为缺少测试文化一直饱受困扰。本章通过描述一个简单的测试策略和框架来支持它。这个测试策略和框架并不是为一个完整的解决方案，但绝对是构建企业级工具和程序的起点。</p>
 <p>这篇文章将分为三个部分：</p>
 <ul>
-<li>Philosophy - 描述编写和运行欠有框架的测试的基本思想理念。阅读这部分了解大致的背景。</li>
-<li>Cookbook - 你编写测试的简单模式系统。</li>
-<li>Framework - 一个简单易懂的测试框架的程序版本。深入阅读这部分来了解框架的机制。</li>
-<li>Example - 一个用测试框架来测试方法的示例。</li>
+<li>Philosophy-描述编写和运行欠有框架的测试的基本思想理念。阅读这部分了解大致的背景。</li>
+<li>Cookbook-你编写测试的简单模式系统。</li>
+<li>Framework-一个简单易懂的测试框架的程序版本。深入阅读这部分来了解框架的机制。</li>
+<li>Example-一个用测试框架来测试方法的示例。</li>
 </ul>
 <h2 id="Philosophy">Philosophy</h2><p>我不太喜欢基于接口的测试。根据我的经验，基于用户接口脚本的测试健壮性很差而一点不易用。当我在做用用户接口测试的项目时，第二天早上测试报告中二三十个测试挂了是经常的事。然而快速检查后，大多数甚至所有的失败的测试实际上达到了程序的预期。一些接口的表面改变导致了实际上的输出不再和预期的输出匹配。我们的测试人员相比写测试脚本花了更多的时间来保证测试用例的迭代更新和追踪测试的正确性。</p>
 <p>我的解决方案是在Smalltalk中编写测试和核对结果。尽管你的测试人员需要编写简单的Smalltalk程序,但是由此测试变得稳定的多了。</p>
@@ -74,14 +412,14 @@
 </ul>
 <p>在示例中，test fixture有两组，一个空的，一个带有变量。首先，继承TestCase和添加我们后面需要引用的实例变量：</p>
 <pre><code>Class: SetTestCase
-    superclass: TestCase
-   <span class="instruction"> instance </span>variables: empty full
+     superclass: TestCase
+    <span class="instruction"> instance </span>variables: empty full
 </code></pre><p>然后，重写setUp来为fixture创建对象：</p>
 <pre><code>SetTestCase&gt;&gt;setUp
-    empty := Set new.
-    full := Set
-    with: <span class="hexcolor">#abc</span>
-    with: <span class="number">5</span>
+     empty := Set new.
+     full := Set
+     with: <span class="hexcolor">#abc</span>
+     with: <span class="number">5</span>
 </code></pre><h3 id="Test_Case">Test Case</h3><p>你已经有了fixture，接下来该做什么？</p>
 <h4 id="你如何表述一个单一的单元测试?">你如何表述一个单一的单元测试?</h4><p>你可以预测发送一个消息到fixture的结果。你需要以某种方式表述这样一个可预测的状况。</p>
 <p>最简单的方法是交互式地表述。你可以在你的fixture中打开一个Inspector，然后给它发消息。这个方法有两个缺点。第一，你一直对同一个fixture发消息。一旦一个测试碰巧打乱了对象，所有的后续测试会失败，即使代码是正确的。更重要的是，因此，你不能很容易地使相互影响的测试和其他的交互。如果，你吧你的对象给其他测试，审查是唯一的方式。</p>
@@ -92,8 +430,8 @@
 </ul>
 <p>示例代码会表明这些。我们可以预测把5加到一个空的组会导致5出现在组中。我们给我们的TestCase子类添加一个方法。在这个方法中我们驱动fixture。</p>
 <pre><code><span class="constant">SetTestCase</span><span class="prompt">&gt;&gt;</span>testAdd
-    empty <span class="symbol">add:</span> <span class="number">5</span>.
-    ...
+     empty <span class="symbol">add:</span> <span class="number">5</span>.
+     ...
 </code></pre><p>一旦你驱动了fixture，你需要添加一个check来保证你的预估是正确的。</p>
 <h3 id="Check">Check</h3><p>一个Test Case驱动一个fixture。</p>
 <h4 id="你如何测试预期的结果">你如何测试预期的结果</h4><p>如果你交互性地测试，你可以直接核对预期的结果。如果你需要查找一个以特定的返回值，你打印出来，保证你获得了正确的返回对象。如果你需要查找副作用，你可以使用Inspector。</p>
@@ -101,23 +439,510 @@
 <pre><code><span class="number">2</span> + <span class="number">3</span> = <span class="number">5</span> ifFalse: [self error: ‘Wrong answer’]
 </code></pre><p>当你测试的时候，你需要区分你需要核查的错误，如，2+3得到了6，和你没有预测到的错误，如，下标超过范围或者消息你没有理解。</p>
 <p>你对意料之外的错误所做的并不多（如果你对它做了，它不算是意料之外了，不是吗？）。当一个灾难性的错误发生，框架停止运行那个测试，记录下错误，然后继续运行下一个测试case。由于每个测试都有自己的fixture，上一个case的错误不会影响下一个case。</p>
-<h2 id="未完待续。。。">未完待续。。。</h2><h2 id="结语">结语</h2><p>Translator:  wongming.cn</p>
-<p>version:  v1</p>
-<p>update:  2015年11月19日</p>
-</div><div class="tags"><a href="/tags/测试/">测试</a><a href="/tags/翻译/">翻译</a></div><div class="post-nav"><a href="/blog/page-list-wrapper-for-front-end.html" class="pre"><i class="icon-previous">前端列表分页功能封装</i></a><a href="/blog/java-management.html" class="next">Java内存管理及对Java对象管理<i class="icon-next"></i></a></div><div data-thread-key="blog/Simple-Smalltalk-Testing-With-Patterns.html" data-title="【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)" data-url="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html" class="ds-share flat"><div class="ds-share-inline"><ul class="ds-share-icons-16"><li data-toggle="ds-share-icons-more"><a href="javascript:void(0);" class="ds-more">分享到：</a></li><li><a href="javascript:void(0);" data-service="weibo" class="ds-weibo">微博</a></li><li><a href="javascript:void(0);" data-service="qzone" class="ds-qzone">QQ空间</a></li><li><a href="javascript:void(0);" data-service="qqt" class="ds-qqt">腾讯微博</a></li><li><a href="javascript:void(0);" data-service="wechat" class="ds-wechat">微信</a></li></ul><div class="ds-share-icons-more"></div></div></div><div data-thread-key="blog/Simple-Smalltalk-Testing-With-Patterns.html" data-title="【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)" data-url="http://wongming.cn/blog/Simple-Smalltalk-Testing-With-Patterns.html" data-author-key="1" class="ds-thread"></div></div></div></div><div class="pure-u-1-4"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search" class="search-form-input"/><input type="hidden" name="sitesearch" value="http://wongming.cn"/></form></div><div class="widget"><div class="widget-title">分類</div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul></div><div class="widget"><div class="widget-title">標籤</div><div class="tagcloud"><a href="/tags/列表分页/" style="font-size: 15px;">列表分页</a> <a href="/tags/Front-End/" style="font-size: 15px;">Front-End</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/内存管理/" style="font-size: 15px;">内存管理</a> <a href="/tags/测试/" style="font-size: 15px;">测试</a> <a href="/tags/翻译/" style="font-size: 15px;">翻译</a></div></div><div class="widget"><div class="widget-title">最新文章</div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/page-list-wrapper-for-front-end.html">前端列表分页功能封装</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/Simple-Smalltalk-Testing-With-Patterns.html">【翻译】Simple-Smalltalk-Testing-With-Patterns(单元测试框架)</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/java-management.html">Java内存管理及对Java对象管理</a></li></ul></div><div class="widget"><div class="comments-title">最近評論</div><div data-num-items="5" data-show-avatars="0" data-show-time="1" data-show-admin="0" data-excerpt-length="32" data-show-title="1" class="ds-recent-comments"></div></div><div class="widget"><div class="widget-title">友站連結</div><ul></ul><a href="https://www.zhihu.com/people/byonecry" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/fangaoshiwo" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/wongming" title="GitHub" target="_blank">GitHub</a></div></div></div></div><div id="footer">© <a href="/." rel="nofollow">2015 Wongming.</a> Contact me by<a rel="nofollow" target="_blank" href="mailto:byonecry@qq.com"> Email</a> or<a rel="nofollow" target="_blank" href="http://weibo.com/fangaoshiwo"> Weibo</a> or<a rel="nofollow" target="_blank" href="https://github.com/wongming"> GitHub.</a></div><a id="rocket" href="#top" class="show"></a><script src="/js/jquery.min.js" type="text/javascript"></script>
-<script src="/js/totop.js" type="text/javascript"></script><script src="/js/fancybox.pack.js" type="text/javascript"></script>
-<script src="/js/jquery.fancybox.js" type="text/javascript"></script><link rel="stylesheet" href="/css/jquery.fancybox.css" type="text/css"><script>var duoshuoQuery = {short_name:'wongming'};
-(function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//dn-comment.qbox.me/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0]
-        || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();
-</script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create','UA-71881751-1','auto');ga('send','pageview');
-</script></div></body></html>
+<p>测试框架是通过提供一个“should:”方法来check预期的值的，这个方法将一个模块作为参数。如果这个模块被评估为真，那么一切都ok。否则，case停止运行，记录错误，然后运行下一个case.</p>
+<h4 id="将checks转化为对布尔值的模块评估。发送一个模块作为“should:”方法的参数。">将checks转化为对布尔值的模块评估。发送一个模块作为“should:”方法的参数。</h4><p>例如，在驱动fixture后（给一个空集合加5），我们需要check来保证5的确在集合中：</p>
+<pre><code>SetTestCase&gt;&gt;testAdd
+     <span class="keyword">empty</span> <span class="keyword">add</span>: <span class="number">5</span>.
+     <span class="keyword">self</span> should: [<span class="keyword">empty</span> includes: <span class="number">5</span>]
+</code></pre><p>TestCase&gt;&gt;should:变了。TestCase&gt;&gt;shouldnt:如果被模块参数被评估为真会导致test case失败。因此你不需要用“(…) not”</p>
+<p>到这里，你就可以运行这个test case了。创建一个TestCase子类的实例，给测试方法一个selector，给结果对象发送运行命令：</p>
+<pre><code>(SetTestCase <span class="keyword">select</span><span class="subst">or</span>: <span class="variable">#testAdd</span>) run
+</code></pre><p>当它跑完了，测试也就完成了。如果回滚了，那么就有错。</p>
+<h3 id="Test_Suite">Test Suite</h3><p>你拥有多个test case。</p>
+<h4 id="你如何运行大数量的测试？">你如何运行大数量的测试？</h4><p>你已经运行了两个test case，于是你想case一个接着一个自动运行。或许你可以通过一系列的表达式将其捆绑在一起来创建和运行test case。然后，你又想运行这系列的case或者那系列的case,你就会被卡住。</p>
+<p>测试框架提供一个对象来代表一系列的测试————TestSuite。TestSuite运行TestCase的一个合集并立即返回所有测试的结果。利用多态性，TestSuite可以包含其他的TestSuite，所以你将joe的测试和tammy的测试放在一起来创建更高级别的suite。</p>
+<h4 id="将TestCase组合成TestSuite。">将TestCase组合成TestSuite。</h4><pre><code>(<span class="tag">TestSuite</span> <span class="rule"><span class="attribute">named</span>:<span class="value"> ‘Money’)
+     add: (MoneyTestCase selector: #testAdd)</span></span>; <span class="rule"><span class="attribute">add</span>:<span class="value"> (MoneyTestCase selector:           #testSubtract)</span></span>; <span class="tag">run</span>
+</code></pre><p>发送一个运行命令的结果是一个TestResult对象。它记录所有失败或错误的test case，同时记录正在运行的suite。</p>
+<p>所有这些对象都适宜通过ObjectFiler或者BOSS存储。你可以简单地存储一个suite，然后调用并运行，和上一次运行比较结果。</p>
+<h2 id="Framework">Framework</h2><p>这部分以编程风格展示测试框架。下面就是具体的实现，以防万一你对怎么实现框架很好奇，你也可以以任何方式修改它。</p>
+<p>当你和一个测试人员对话，测试的最小单位就是test Case。TestCase是个用户级的对象，代表一个单一的test case。</p>
+<pre><code><span class="attribute">Class</span>: <span class="string">TestCase</span>
+     <span class="attribute">superclass</span>: <span class="string">Object</span>
+</code></pre><p>测试人员把建立”test fixture”（一个带有可预测返回、很容易创建和解释的对象结构），很多不同的test case基于同一个fixture运行。</p>
+<p>在框架中可以通过给每个TestCase一个筛选Selector来声明case的区别。Selector触发的变量行为是测试代码。同一个类的实例共享同一个fixture。</p>
+<pre><code>Class: TestCase
+     superclass: Object
+    <span class="instruction"> instance </span>variables: selector
+     class variable: FailedCheckSignal
+</code></pre><p>TestCase class&gt;&gt;selector:是一个完整的创建方法。</p>
+<pre><code>TestCase <span class="class"><span class="keyword">class</span>&gt;&gt;<span class="title">selector</span>: <span class="title">aSymbol</span></span>
+     ^<span class="variable">self</span> <span class="keyword">new</span> setSelector: aSymbol
+</code></pre><p>TestCase&gt;&gt;setSelector:是一个创建的参数方法。</p>
+<pre><code><span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span><span class="symbol">setSelector:</span> aSymbol
+     selector <span class="symbol">:</span>= aSymbol
+</code></pre><p>TestCase子类通过分别重写钩子方法（Hook Method）setUp和tearDown来创建和销毁测试固件。TestCase本身为这些设么也不做的方法提供存根方法（Stub Method）。</p>
+<pre><code><span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span>setUp
+     <span class="string">"Run whatever code you need to get ready for the test to run."</span>
+
+<span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span>tearDown
+     <span class="string">"Release whatever resources you used for the test."</span>
+</code></pre><p>运行TestCase最简单的方式就是发送一个“run”命令。“Run”调用固件构建方法，运行selector，最后调用固件销毁方法。需要注意的是，不管测试执行是否出错，固件销毁方法都会被执行。调用的setUp和tearDown方法可以封装在一个执行方法中，但是由于它们并不是外部接口的一部分只是开放编码而已。</p>
+<pre><code><span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span>run
+     <span class="keyword">self</span> setUp.
+     [<span class="keyword">self</span> performTest] <span class="symbol">valueNowOrOnUnwindDo:</span> [<span class="keyword">self</span> tearDown]
+</code></pre><p>执行测试时只要执行selector即可。</p>
+<pre><code><span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span>performTest
+     <span class="keyword">self</span> <span class="symbol">perform:</span> selector
+</code></pre><p>只是跑一个单一的TestCase没什么意思。实际生产中，你一次会跑很多个TestCase。测试人员把这些运行的测试称作“suites”。TestSuite继承自Object类。它由多个TestCase组成。</p>
+<pre><code>Class: TestSuite
+     superclass: Object
+    <span class="instruction"> instance </span>variables: name testCases
+</code></pre><p>TestSuite是有固定名称的对象。这使得他们很容易区分，因此他们可以很简单地从二级存储中存储和检索。下面是完整的构造方法和构造参数方法。</p>
+<pre><code><span class="constant">TestSuite</span> <span class="class"><span class="keyword">class</span>&gt;&gt;<span class="title">named</span>: <span class="title">aString</span></span>
+     ^<span class="keyword">self</span> <span class="symbol">newsetName:</span> aString
+
+<span class="constant">TestSuite</span><span class="prompt">&gt;&gt;</span><span class="symbol">setName:</span> aString
+     name <span class="symbol">:</span>= aString.
+     testCases <span class="symbol">:</span>= <span class="constant">OrderedCollection</span> new
+</code></pre><p>TestCase实例变量直接在TestSuite中的setName方法初始化，因为不会期望需要它成为有任何不同的集合。</p>
+<p>TestSuite有个访问方法获得它们的名称，预计在用户接口可能会调用他们。</p>
+<pre><code><span class="constant">TestSuite</span><span class="prompt">&gt;&gt;</span>name
+     ^name
+
+<span class="constant">TestSuite</span>有用来添加一个或多个<span class="constant">TestCase</span>的集合访问方法。
+
+<span class="constant">TestSuite</span><span class="prompt">&gt;&gt;</span><span class="symbol">addTestCase:</span> aTestCase
+     testCases <span class="symbol">add:</span> aTestCase
+
+<span class="constant">TestSuite</span><span class="prompt">&gt;&gt;</span><span class="symbol">addTestCases:</span> aCollection
+     aCollection <span class="symbol">do:</span> [<span class="symbol">:each</span> | <span class="keyword">self</span> <span class="symbol">addTestCase:</span> each]
+</code></pre><p>当你执行一个TestSuite时，你需要运行所有的TestCase。不过,这并不是那么简单。如果你有一个表示你的应用的验收测试的suite，在执行结束后，你想知道测试执行了多久和哪些case存在问题。这就是你想要存储以供将来参考的信息。</p>
+<p>TestResult是TestSuite的结果对象。执行一个TestSuite会返回一个记录以上信息的TestResult对象-执行的起止时间，suite名，失败和错误信息。</p>
+<pre><code>Class: TestResult
+     superclass: Object
+    <span class="instruction"> instance </span>variables: startTime stopTime testName failures errors
+</code></pre><p>当你运行一个TestSuite，它会创建一个在运行TestCase前后会作时间标识的TestResult对象。</p>
+<pre><code><span class="type">TestSuite</span>&gt;&gt;run
+     | <span class="literal">result</span> |
+     <span class="literal">result</span> := self defaultTestResult.
+     <span class="literal">result</span> start.
+     self run: <span class="literal">result</span>.
+     <span class="literal">result</span> stop.
+     ^<span class="literal">result</span>
+</code></pre><p>TestSuite的run方法和TestCase的run方法并不是以多态的方式等价。这个问题需要在未来版本的框架中解决。一种选择是利用毫秒级TestCaseResult进行性能回归测试。</p>
+<p>默认的TestResult对象由TestSuite用默认的类构建。</p>
+<pre><code><span class="constant">TestSuite</span><span class="prompt">&gt;&gt;</span>defaultTestResult
+     ^<span class="keyword">self</span> defaultTestResultClass <span class="symbol">test:</span> <span class="keyword">self</span>
+
+<span class="constant">TestSuite</span><span class="prompt">&gt;&gt;</span>defaultTestResultClass
+     ^<span class="constant">TestResult</span>
+</code></pre><p>TestResult的完整构造方法需要传递一个TestSuite。</p>
+<pre><code><span class="constant">TestResult</span> <span class="class"><span class="keyword">class</span>&gt;&gt;<span class="title">test</span>: <span class="title">aTest</span></span>
+     ^<span class="keyword">self</span> <span class="symbol">newsetTest:</span> aTest
+
+<span class="constant">TestResult</span><span class="prompt">&gt;&gt;</span><span class="symbol">setTest:</span> aTest
+     testName <span class="symbol">:</span>= aTest name.
+     failures <span class="symbol">:</span>= <span class="constant">OrderedCollection</span> new
+     errors <span class="symbol">:</span>= <span class="constant">OrderedCollection</span> new
+</code></pre><p>通过发送开始停止消息来给TestResult时间标记。由于开始和停止需要成双成对地执行，可以隐藏在执行方法中。</p>
+<pre><code><span class="constant">TestResult</span><span class="prompt">&gt;&gt;</span>start
+     startTime <span class="symbol">:</span>= <span class="constant">Date</span> dateAndTimeNow
+<span class="constant">TestResult</span><span class="prompt">&gt;&gt;</span>stop
+     stopTime <span class="symbol">:</span>= <span class="constant">Date</span> dateAndTimeNow
+</code></pre><p>当TestSuite根据一个给出的TestResult运行的话，它就简单地根据那个TestResult运行每个TestCase。</p>
+<pre><code>TestSuite&gt;&gt;run: aTestResult
+     testCases <span class="keyword">do</span>: [:<span class="keyword">each</span> | <span class="keyword">each</span> run: aTestResult]
+</code></pre><p>run在TestSuite和TestCase中是组合的selector，所以你可以构建包含其他的TestSuite的TestSuite，而不是或者除了包含TestCase。</p>
+<p>当TestCase根据一个给出的TestResult运行的话，它要么正常运行，要么添加一个Error到TestResult，要么添加一个Failure到TestResult。捕获Error很简单-利用系统提供的errorSignal。捕获Failure必须由TestCase本身支持。首先，我们需要一个类的初始化方法来创建一个信号。</p>
+<pre><code><span class="tag">TestCase</span> <span class="tag">class</span>&gt;&gt;<span class="tag">initialize</span>
+     <span class="rule"><span class="attribute">FailedCheckSignal </span>:<span class="value">= self errorSignal newSignal
+     notifierString: <span class="string">'Check failed - '</span></span></span>;
+     <span class="rule"><span class="attribute">nameClass</span>:<span class="value"> self message: <span class="hexcolor">#c</span>heckSignal</span></span>
+</code></pre><p>现在需要一个访问方法。</p>
+<pre><code><span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span>failedCheckSignal
+     ^<span class="constant">FailedCheckSignal</span>
+</code></pre><p>现在，当TestCase根据一个TestResult运行时，它必须捕获error和failure并通知TestResult，与此同时不管测试执行是否正确，它也必须执行tearDown代码。这导致了它是框架中的最令人厌恶的方法，因为在这个方法中包含两个嵌套的error handler 和 valueNowOrOnUnwindDo。There is a missing pattern expressed here and in TestCase&gt;&gt;run about usingensure: to safely run the second halt of an Execute Around Method.</p>
+<pre><code><span class="constant">TestCase</span><span class="prompt">&gt;&gt;</span><span class="symbol">run:</span> aTestResult
+     <span class="keyword">self</span> setUp.
+     [<span class="keyword">self</span> errorSignal
+          <span class="symbol">handle:</span> [<span class="symbol">:ex</span> | aTestResult <span class="symbol">error:</span> ex errorString <span class="symbol">in:</span> <span class="keyword">self</span>]
+          <span class="symbol">do:</span>
+               [<span class="keyword">self</span> failedCheckSignal
+                    <span class="symbol">handle:</span> [<span class="symbol">:ex</span> | aTestResult <span class="symbol">failure:</span> ex errorString <span class="symbol">in:</span> <span class="keyword">self</span>]
+                    <span class="symbol">do:</span> [<span class="keyword">self</span> performTest]]] <span class="symbol">valueNowOrOnUnwindDo:</span> [<span class="keyword">self</span> tearDown]
+</code></pre><p>当TestResult被告知error或failure发生时，它会把原因记录到两个集合中的一个。为了简单起见，记录只是两个元素数组，但是它可能只是含有时间戳和第一个类对象和更多的崩溃细节。</p>
+<pre><code>TestResult&gt;&gt;<span class="string">error:</span> aString <span class="string">in:</span> aTestCase
+     errors <span class="string">add:</span> (Array <span class="string">with:</span> aTestCase <span class="string">with:</span> aString)
+
+TestResult&gt;&gt;<span class="string">failure:</span> aString <span class="string">in:</span> aTestCase
+     failures <span class="string">add:</span> (Array <span class="string">with:</span> aTestCase <span class="string">with:</span> aString)
+</code></pre><p>如果在测试方法中出现未捕获的error，就会触发error case，如，消息没有被接收。什么情况下触发failure呢？TestCase提供两个方法用来核实failure。The first, should: aBlock, signals a failure if the evaluation of aBlock returns false. The second, shouldnt: aBlock, does just the opposite.</p>
+<pre><code><span class="string">should:</span> aBlock
+     aBlock value <span class="string">ifFalse:</span> [self failedCheckSignal raise]
+<span class="string">shouldnt:</span> aBlock
+     aBlock value <span class="string">ifTrue:</span> [self failedCheckSignal raise]
+</code></pre><p>测试方法会执行代码来触发test fixture，然后在should:和shouldnt: blocks中核验结果。</p>
+<h2 id="Example">Example</h2><p>以上就是测试框架的运作过程，但是你怎么使用它呢？下面就是一个简短的例子，这个例子用Sets测试一些消息。首先继承TestCase，因为需要一对Sets。</p>
+<pre><code>Class: SetTestCase
+     superclass: TestCase
+    <span class="instruction"> instance </span>variables: emptyfull
+</code></pre><p>现在我们初始化这些变量，所以重写setUp。</p>
+<pre><code>SetTestCase&gt;&gt;setUp
+     empty:= Set new.
+     full := Set
+     with: <span class="hexcolor">#abc</span>
+     with: <span class="number">5</span>
+</code></pre><p>现在需要一个测试方法。测试向Set中添加一个元素是否正常。</p>
+<pre><code><span class="constant">SetTestCase</span><span class="prompt">&gt;&gt;</span>testAdd
+     <span class="symbol">emptyadd:</span> <span class="number">5</span>.
+     <span class="keyword">self</span> <span class="symbol">should:</span> [<span class="symbol">emptyincludes:</span> <span class="number">5</span>]
+</code></pre><p>现在我们通过评估”(SetTestCase selector: #testAdd) run”来运行一个TestCase。</p>
+<p>下面是一个使用shouldnt:的case，它读取”after removing5 from full, full should include #abc and it shouldn’t include 5.”</p>
+<pre><code><span class="constant">SetTestCase</span><span class="prompt">&gt;&gt;</span>testRemove
+     full <span class="symbol">remove:</span> <span class="number">5</span>.
+     <span class="keyword">self</span> <span class="symbol">should:</span> [full <span class="symbol">includes:</span> <span class="comment">#abc].</span>
+     <span class="keyword">self</span> <span class="symbol">shouldnt:</span> [full <span class="symbol">includes:</span> <span class="number">5</span>]
+
+下面是一个在键盘中断任务时可以确保error能够被标记的例子。
+
+<span class="constant">SetTestCase</span><span class="prompt">&gt;&gt;</span>testIllegal
+     <span class="keyword">self</span> <span class="symbol">should:</span> [<span class="keyword">self</span> errorSignal <span class="symbol">handle:</span> [<span class="symbol">:ex</span> | <span class="keyword">true</span>] <span class="symbol">do:</span> [<span class="symbol">emptyat:</span> <span class="number">5</span>. <span class="keyword">false</span>]]
+</code></pre><p>我们也可以将其一起放在TestSuite中。</p>
+<pre><code>| suite |
+suite := TestSuite named: <span class="string">'Set Tests'</span><span class="built_in">.
+</span>suite addTestCase: (SetTestCase <span class="keyword">select</span><span class="subst">or</span>: <span class="variable">#testAdd</span>)<span class="built_in">.
+</span>suite addTestCase: (SetTestCase <span class="keyword">select</span><span class="subst">or</span>: <span class="variable">#testRemove</span>)<span class="built_in">.
+</span>suite addTestCase: (SetTestCase <span class="keyword">select</span><span class="subst">or</span>: <span class="variable">#testIllegal</span>)<span class="built_in">.
+</span>^suite
+</code></pre><p>下面是suite和运行后返回的TestResult间的对象关系图。<br><a href="http://ww4.sinaimg.cn/mw690/4db7629cjw1f39xxi1qeoj20dz0byab3.jpg" target="_blank" rel="external">http://ww4.sinaimg.cn/mw690/4db7629cjw1f39xxi1qeoj20dz0byab3.jpg</a><br><img src="http://ww4.sinaimg.cn/mw690/4db7629cjw1f39xxi1qeoj20dz0byab3.jpg" alt="单元测试框架对象关系图"></p>
+<p>上面所示的测试方法只覆盖的Sets的一小部分功能。为Sets的所有公共方法编写测试是一项艰巨的任务。然而,随着Hal Hilderbrand告诉我使用早期版本的框架后,“没有什么比底层对象不工作更重要。你必须写测试,以确保一切工作。”</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/测试/" rel="tag">#测试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/data-driven-unit-testing-tool-for-python.html" rel="next" title="一种数据与逻辑分离的Python单元测试工具">
+                <i class="fa fa-chevron-left"></i> 一种数据与逻辑分离的Python单元测试工具
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="blog/simple-smalltalk-testing-with-patterns.html"
+           data-title="【翻译】Simple-Smalltalk-Testing-With-Patterns" data-url="http://wongming.cn/blog/simple-smalltalk-testing-with-patterns.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ww3.sinaimg.cn/mw690/4db7629cgw1f3rm6fnghsj20qo0zkq9a.jpg"
+               alt="WongMing" />
+          <p class="site-author-name" itemprop="name">WongMing</p>
+          <p class="site-description motion-element" itemprop="description">程序猿：Java Python 测试；爱好篮球：艾密、詹密；骑行；Dota1。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wongming" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/fangaoshiwo" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/wangmingedison" target="_blank" title="ZhiHu">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  ZhiHu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Simple-Smalltalk-Testing-With-Patterns"><span class="nav-number">1.</span> <span class="nav-text">Simple-Smalltalk-Testing-With-Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Philosophy"><span class="nav-number">1.2.</span> <span class="nav-text">Philosophy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Failures_and_Errors"><span class="nav-number">1.2.1.</span> <span class="nav-text">Failures and Errors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unit_testing"><span class="nav-number">1.2.2.</span> <span class="nav-text">Unit testing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Integration_testing"><span class="nav-number">1.2.3.</span> <span class="nav-text">Integration testing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Running_tests"><span class="nav-number">1.2.4.</span> <span class="nav-text">Running tests</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookbook"><span class="nav-number">1.3.</span> <span class="nav-text">Cookbook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fixture"><span class="nav-number">1.3.1.</span> <span class="nav-text">Fixture</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#怎么开始编写测试?"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">怎么开始编写测试?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设计一个test_fixture"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">设计一个test fixture</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test_Case"><span class="nav-number">1.3.2.</span> <span class="nav-text">Test Case</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#你如何表述一个单一的单元测试?"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">你如何表述一个单一的单元测试?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#把一个可预估的fixture的反应描述为一个方法"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">把一个可预估的fixture的反应描述为一个方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Check"><span class="nav-number">1.3.3.</span> <span class="nav-text">Check</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#你如何测试预期的结果"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">你如何测试预期的结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将checks转化为对布尔值的模块评估。发送一个模块作为“should:”方法的参数。"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">将checks转化为对布尔值的模块评估。发送一个模块作为“should:”方法的参数。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test_Suite"><span class="nav-number">1.3.4.</span> <span class="nav-text">Test Suite</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#你如何运行大数量的测试？"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">你如何运行大数量的测试？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将TestCase组合成TestSuite。"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">将TestCase组合成TestSuite。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Framework"><span class="nav-number">1.4.</span> <span class="nav-text">Framework</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">1.5.</span> <span class="nav-text">Example</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WongMing</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wongming"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
